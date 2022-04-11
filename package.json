@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npx nativefier --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray Messsages4Desktop",
-    "mac": "npm run mac:intel && npm run mac:arm64 && node macos.js",
-    "mac:test": "npx nativefier --platform osx -a universal --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacIntel",
-    "mac:intel": "npx nativefier --platform osx -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacIntel",
-    "mac:arm64": "npx nativefier --platform osx -a arm64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacARM64",
+    "mac": "npm run mac:intel && npm run mac:arm64 && cp 'dist/Google Messages-darwin-arm64/Google Messages.app/Contents/Resources/app/nativefier.json' 'dist/Google Messages-darwin-x64/Google Messages.app/Contents/Resources/app/nativefier.json' && node macos.js",
+    "mac:intel": "npx nativefier --platform osx -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist",
+    "mac:arm64": "npx nativefier --platform osx -a arm64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist",
     "windows": "npx nativefier --platform windows --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Windows",
     "linux": "npx nativefier --platform linux --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Linux",
     "build:all": "npm run mac && npm run windows && npm run linux",
@@ -29,9 +28,8 @@
   },
   "homepage": "https://github.com/randomblock1/messages4desktop#readme",
   "dependencies": {
+    "@electron/universal": "^1.2.1",
+    "fs-extra": "^10.0.1",
     "nativefier": "^47.0.0"
-  },
-  "devDependencies": {
-    "@electron/universal": "^1.2.1"
   }
 }
