@@ -1,0 +1,37 @@
+{
+  "name": "messages4desktop",
+  "version": "1.0.0",
+  "description": "Google Messsages on your desktop",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx nativefier --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray Messsages4Desktop",
+    "mac": "npm run mac:intel && npm run mac:arm64 && node macos.js",
+    "mac:test": "npx nativefier --platform osx -a universal --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacIntel",
+    "mac:intel": "npx nativefier --platform osx -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacIntel",
+    "mac:arm64": "npx nativefier --platform osx -a arm64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray dist/MacARM64",
+    "windows": "npx nativefier --platform windows --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Windows",
+    "linux": "npx nativefier --platform linux --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Linux",
+    "build:all": "npm run mac && npm run windows && npm run linux",
+    "clean": "rm -Rf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randomblock1/messages4desktop.git"
+  },
+  "keywords": [
+    "nativefier"
+  ],
+  "author": "Randomblock1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/randomblock1/messages4desktop/issues"
+  },
+  "homepage": "https://github.com/randomblock1/messages4desktop#readme",
+  "dependencies": {
+    "nativefier": "^47.0.0"
+  },
+  "devDependencies": {
+    "@electron/universal": "^1.2.1"
+  }
+}
