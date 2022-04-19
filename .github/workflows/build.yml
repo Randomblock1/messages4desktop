@@ -1,0 +1,25 @@
+name: App Build
+
+on:
+  push:
+    branches: [ master ] 
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: npm ci
+    - run: npm run build:all
+    - run: |
+        7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
+        7z a Windows.7z "dist/Google Messages-win32-x64" -r
+        7z a Linux.7z "dist/Google Messages-linux-x64" -r
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: "*.7z"
