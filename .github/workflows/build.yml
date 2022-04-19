@@ -17,12 +17,15 @@ jobs:
           if [ "${{matrix.os}}" == "macos-latest" ]; then
             npm run mac
             7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
-          else if [ "${{matrix.os}}" == "ubuntu-latest" ]; then
+          elif [ "${{matrix.os}}" == "ubuntu-latest" ]; then
             npm run linux
             7z a Linux.7z "dist/GoogleMessages-linux-x64" -r
-          else
+          elif [ "${{matrix.os}}" == "windows-latest" ]; then
             npm run windows
             7za a Windows.7z "dist/Google Messages-win32-x64" -r
+          else
+            echo "Unsupported platform"
+            exit 1
           fi
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
