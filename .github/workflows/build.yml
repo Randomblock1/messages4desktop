@@ -13,15 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
-      - if: matrix.os == "macos-latest"
+      - if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run mac
           7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
-      - if: matrix.os == "ubuntu-latest"
+      - if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           npm run linux
           7z a Linux.7z "dist/GoogleMessages-linux-x64" -r
-      - if: matrix.os == "windows-latest"
+      - if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm run windows
           7za a Windows.7z "dist/Google Messages-win32-x64" -r
