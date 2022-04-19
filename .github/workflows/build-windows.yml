@@ -1,0 +1,26 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt install wine64
+      - run: npm ci
+      - run: npm run windows
+      - run: |
+          7z a Windows.7z "dist/Google Messages-win32-x64" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows App
+          path: "*.7z"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Release build
+          files: "*.7z"

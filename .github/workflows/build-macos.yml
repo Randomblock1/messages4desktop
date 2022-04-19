@@ -1,0 +1,25 @@
+name: MacOS Build
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run mac
+      - run: |
+          7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: MacOS App
+          path: "*.7z"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Release build
+          files: "*.7z"
