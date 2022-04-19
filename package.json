@@ -4,12 +4,12 @@
   "description": "Google Messsages on your desktop",
   "main": "index.js",
   "scripts": {
-    "build": "npx nativefier --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray Messsages4Desktop",
+    "build": "npx nativefier --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce --tray start-in-tray",
     "mac": "npx nativefier --platform osx -a universal --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce $(pwd)/dist",
     "mac:intel": "npx nativefier --platform osx -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce dist",
     "mac:arm64": "npx nativefier --platform osx -a arm64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools --darwin-dark-mode-support --counter --bounce dist",
-    "windows": "npx nativefier --platform windows --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Windows",
-    "linux": "npx nativefier --platform linux --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist/Linux",
+    "windows": "npx nativefier --platform windows -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist",
+    "linux": "npx nativefier --platform linux -a x64 --name 'Google Messages' 'https://messages.google.com/web' --honest --disable-dev-tools  --tray start-in-tray dist",
     "build:all": "npm run mac && npm run windows && npm run linux",
     "clean": "rm -Rf dist",
     "test": "exit 0"
