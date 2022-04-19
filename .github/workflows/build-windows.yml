@@ -20,7 +20,7 @@ jobs:
           path: "*.7z"
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: Release build
+          tag_name: latest
+          name: Development build
           files: "*.7z"
