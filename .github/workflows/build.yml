@@ -1,0 +1,69 @@
+name: Build Release
+
+on:
+  push:
+    branches: [master]
+  release:
+    types: [published]
+  schedule:
+    - cron: '0 0 * * 0'  # every Sunday at midnight
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run linux
+      - run: |
+          7z a Linux.7z "dist/GoogleMessages-linux-x64" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Linux App
+          path: "*.7z"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          prerelease: True
+          name: Development build
+          files: "*.7z"
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt install wine64
+      - run: npm ci
+      - run: npm run windows
+      - run: |
+          7z a Windows.7z "dist/Google Messages-win32-x64" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows App
+          path: "*.7z"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          prerelease: True
+          name: Development build
+          files: "*.7z"
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run mac
+      - run: |
+          7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: MacOS App
+          path: "*.7z"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          prerelease: True
+          name: Development build
+          files: "*.7z"
