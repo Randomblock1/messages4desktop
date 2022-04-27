@@ -58,7 +58,7 @@ jobs:
       - run: npm run mac
       - run: |
           7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
-          echo RELEASE_BODY="Development build. Updated nightly every Sunday. This build was generated on $(date)." >> $GITHUB_ENV
+          echo RELEASE_BODY="Development build. This build was generated on $(date)." >> $GITHUB_ENV
       - uses: actions/upload-artifact@v3
         with:
           name: MacOS App
