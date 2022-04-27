@@ -6,7 +6,7 @@ on:
   release:
     types: [published]
   schedule:
-    - cron: '0 0 * * 0'  # every Sunday at midnight
+    - cron: "0 0 * * 0" # every Sunday at midnight
 
 jobs:
   build-linux:
@@ -70,5 +70,5 @@ jobs:
           prerelease: True
           name: Development build
           files: "*.7z"
-          body: ${ env.RELEASE_BODY }
+          body: ${{ env.RELEASE_BODY }}
           fail_on_unmatched_files: true
