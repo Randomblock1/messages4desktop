@@ -28,6 +28,7 @@ jobs:
           prerelease: True
           name: Development build
           files: "*.7z"
+          fail_on_unmatched_files: True
   build-windows:
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +49,7 @@ jobs:
           prerelease: True
           name: Development build
           files: "*.7z"
+          fail_on_unmatched_files: True
   build-macos:
     runs-on: macos-latest
     steps:
@@ -56,6 +58,7 @@ jobs:
       - run: npm run mac
       - run: |
           7z a MacOS.7z "dist/Google Messages-darwin-universal" -r
+          echo "run_time=$(date)" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v3
         with:
           name: MacOS App
@@ -67,3 +70,5 @@ jobs:
           prerelease: True
           name: Development build
           files: "*.7z"
+          body: "Development build. Updated nightly every Sunday. This build was generated on ${ env.run_time }"
+          fail_on_unmatched_files: true
