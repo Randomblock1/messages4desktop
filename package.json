@@ -1,6 +1,6 @@
 {
   "name": "messages4desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Google Messsages on your desktop",
   "main": "index.js",
   "scripts": {
