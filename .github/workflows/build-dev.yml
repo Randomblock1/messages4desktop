@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm ci
+      - run: npm ci -f
       - run: npm run linux
       - run: |
           7z a linux.7z "dist/GoogleMessages-linux-x64" -r
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt install wine64
-      - run: npm ci
+      - run: npm ci -f
       - run: npm run windows
       - run: |
           7z a windows.7z "dist/Google Messages-win32-x64" -r
@@ -37,7 +37,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm ci
+      - run: npm ci -f
       - run: npm run mac
       - run: |
           7z a macos.7z "dist/Google Messages-darwin-universal" -r
