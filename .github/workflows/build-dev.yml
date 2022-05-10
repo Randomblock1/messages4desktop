@@ -1,0 +1,47 @@
+name: Development Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run linux
+      - run: |
+          7z a linux.7z "dist/GoogleMessages-linux-x64" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Linux App
+          path: "linux.7z"
+
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt install wine64
+      - run: npm ci
+      - run: npm run windows
+      - run: |
+          7z a windows.7z "dist/Google Messages-win32-x64" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows App
+          path: "windows.7z"
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run mac
+      - run: |
+          7z a macos.7z "dist/Google Messages-darwin-universal" -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: MacOS App
+          path: "macos.7z"
