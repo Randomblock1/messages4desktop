@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install packages
-        run: npm ci
+        run: npm ci -f
 
       - name: Build Linux binary
         run: npm run linux
@@ -47,7 +47,7 @@ jobs:
       - run: sudo apt install wine64
 
       - name: Install packages
-        run: npm ci
+        run: npm ci -f
 
       - name: Build Windows binary
         run: npm run windows
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install packages
-        run: npm ci
+        run: npm ci -f
 
       - name: Build universal MacOS binary
         run: npm run mac
