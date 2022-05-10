@@ -1,0 +1,171 @@
+name: Build Release
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # every Sunday at midnight
+  push:
+    tags:
+      - "v*.*.*"
+      - "p*"
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build Linux binary
+        run: npm run linux
+
+      - name: Get version
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: tagName
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Compress development build
+        if: >
+          github.event_name == 'schedule'
+        run: |
+          7z a linux.7z "dist/Google Messages-linux-x64" -r
+
+      - name: Compress release build
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-linux.7z
+          7z a $ARTIFACT "dist/Google Messages-linux-x64" -r
+
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: sudo apt install wine64
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build Windows binary
+        run: npm run windows
+
+      - name: Get version
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: tagName
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Compress development build
+        if: >
+          github.event_name == 'schedule'
+        run: |
+          7z a windows.7z "dist/Google Messages-win32-x64" -r
+
+      - name: Compress release build
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-windows.7z
+          7z a $ARTIFACT "dist/Google Messages-win32-x64" -r
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows App
+          path: "windows.7z"
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build universal MacOS binary
+        run: npm run mac
+
+      - name: Get version
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: tagName
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Compress development build
+        if: >
+          github.event_name == 'schedule'
+        run: |
+          7z a macos.7z "dist/Google Messages-darwin-universal" -r
+
+      - name: Compress release build
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-macos.7z
+          7z a $ARTIFACT "dist/Google Messages-darwin-universal" -r
+
+      - name: Upload pre-release binaries
+        if: >
+          github.event_name == 'schedule'
+        uses: actions/upload-artifact@v3
+        with:
+          path: macos.7z
+
+      - name: Upload release binaries
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v2
+        with:
+          path: messages4desktop-${{ steps.tagName.outputs.version }}-macos.7z
+
+  deploy:
+    needs: [build-windows, build-linux, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+
+      - name: Get the version
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: tagName
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Get date for a scheduled pre-release
+        if: github.event_name == 'schedule'
+        id: tagDate
+        run: |
+          DATE=$(date "+%Y%m%d")
+          echo "::set-output name=date::$DATE"
+
+      - name: Create a scheduled pre-release
+        if: github.event_name == 'schedule'
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Weekly pre-release
+          prerelease: true
+          tag_name: p${{ steps.tagDate.outputs.date }}
+          files: |
+            windows.7z
+            linux.7z
+            macos.7z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: v${{ steps.tagName.outputs.version }}
+          files: |
+            messages4desktop-${{ steps.tagName.outputs.version }}-windows.7z
+            messages4desktop-${{ steps.tagName.outputs.version }}-linux.7z
+            messages4desktop-${{ steps.tagName.outputs.version }}-macos.7z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
