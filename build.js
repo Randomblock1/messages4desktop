@@ -3,12 +3,12 @@ const fs = require("fs");
 const process = require("process");
 
 inputPlatform = process.argv[2];
-packagejson = fs.readFileSync("package.json");
+packageJson = fs.readFileSync("package.json");
 
 var options = {
-  name: "Google Messages", // will be inferred if not specified
-  targetUrl: "https://messages.google.com/web", // required
-  version: JSON.parse(packagejson)["version"],
+  name: "Google Messages",
+  targetUrl: "https://messages.google.com/web",
+  version: JSON.parse(packageJson)["version"],
   out: "dist",
   counter: true,
   bounce: true,
@@ -49,5 +49,5 @@ nativefier(options, function (error, appPath) {
     console.error(error);
     return;
   }
-  console.log("App has been nativefied to", appPath);
+  console.log("App has been generated to", appPath);
 });
