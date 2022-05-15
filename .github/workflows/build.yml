@@ -39,6 +39,19 @@ jobs:
           ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-linux.7z
           7z a $ARTIFACT "dist/Google Messages-linux-x64" -r
 
+      - name: Upload pre-release binaries
+        if: >
+          github.event_name == 'schedule'
+        uses: actions/upload-artifact@v3
+        with:
+          path: linux.7z
+
+      - name: Upload release binaries
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v2
+        with:
+          path: messages4desktop-${{ steps.tagName.outputs.version }}-linux.7z
+
   build-windows:
     runs-on: ubuntu-latest
     steps:
@@ -71,10 +84,18 @@ jobs:
           ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-windows.7z
           7z a $ARTIFACT "dist/Google Messages-win32-x64" -r
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload pre-release binaries
+        if: >
+          github.event_name == 'schedule'
+        uses: actions/upload-artifact@v3
         with:
-          name: Windows App
-          path: "windows.7z"
+          path: windows.7z
+
+      - name: Upload release binaries
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v2
+        with:
+          path: messages4desktop-${{ steps.tagName.outputs.version }}-windows.7z
 
   build-macos:
     runs-on: macos-latest
