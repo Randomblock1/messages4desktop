@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/randomblock1/messages4desktop#readme",
   "dependencies": {
-    "nativefier": "^47.1.3"
+    "nativefier": "^47.2.0"
   }
 }
