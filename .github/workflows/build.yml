@@ -31,13 +31,13 @@ jobs:
         if: >
           github.event_name == 'schedule'
         run: |
-          7z a linux.7z "dist/Google Messages-linux-x64" -r
+          7z a linux.7z "dist/GoogleMessages-linux-x64" -r
 
       - name: Compress release build
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           ARTIFACT=messages4desktop-${{ steps.tagName.outputs.version }}-linux.7z
-          7z a $ARTIFACT "dist/Google Messages-linux-x64" -r
+          7z a $ARTIFACT "dist/GoogleMessages-linux-x64" -r
 
       - name: Upload pre-release binaries
         if: >
